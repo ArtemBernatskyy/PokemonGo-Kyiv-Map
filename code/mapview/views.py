@@ -1,13 +1,13 @@
 from django.shortcuts import render
-from .models import Player
+from .models import Player, City
 
 
 def polygon(request):
 	kyiv_points = ''
 
 	context = {
-		# 'kyiv_polygon': kyiv_polygon,
-		'players': Player.objects.active()
+		'cities': City.objects.active(),
+		'players': Player.objects.active(),
 	}
 
 	return render(request, "mapview/map.html", context)

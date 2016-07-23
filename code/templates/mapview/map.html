@@ -39,24 +39,26 @@
         });
 
 
-        {% comment %} 
-        var kyivCoords = [
-            {% for pol_point in kyiv_polygon %}
-            {lng:{{ pol_point.0 }}, lat: {{ pol_point.1 }}},
-            {% endfor %}
-        ];
+        {# comment #} 
+        {% for city in cities %}
+          var city_coordinates{{ forloop.counter }} = [
+              {% for point in city.points.all %}
+              {lng:{{ point.lon }}, lat: {{ point.lat }}},
+              {% endfor %}
+          ];
 
-        // Construct the polygon.
-        var Kiev = new google.maps.Polygon({
-          paths: kyivCoords,
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#FF0000',
-          fillOpacity: 0.35
-        });
-        Kiev.setMap(map);
-        {% endcomment %} 
+          // Construct the polygon.
+          var City{{ forloop.counter }} = new google.maps.Polygon({
+            paths: city_coordinates{{ forloop.counter }},
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35
+          });
+          City{{ forloop.counter }}.setMap(map);
+        {% endfor %}
+        {# endcomment #} 
 
         var marker, i;
 

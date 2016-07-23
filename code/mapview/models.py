@@ -34,11 +34,18 @@ class PlayerPoint(models.Model):
 		return str(self.lat) + ', ' + str(self.lon)
 
 
+class CityManager(models.Manager):
+    def active(self, *args, **kwargs):
+        return super(CityManager, self).filter(state=True)
+
+
 class City(models.Model):
 	city_name = models.CharField(max_length=550, unique=True)
 	created_date = models.DateTimeField(auto_now_add=True)
 	updated_date = models.DateTimeField(auto_now=True)
 	state = models.BooleanField(default=False, help_text='if true than this user will be active')
+
+	objects = PlayerManager()
 
 	def __str__(self):
 		return self.city_name
