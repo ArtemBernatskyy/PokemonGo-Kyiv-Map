@@ -70,6 +70,7 @@
 
         var marker, i;
 
+        {# comment #} 
         {% for player in kyiv_points %}
         for (i = 0; i < bigdata{{ forloop.counter }}.length; i++) {
               marker = new google.maps.Marker({
@@ -80,7 +81,7 @@
               });
         }
         {% endfor %}
-
+        {# endcomment #} 
 
         // "For displaying as polygons"
         {% comment %} 

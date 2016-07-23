@@ -5,13 +5,14 @@ from .bigdata.data import kyiv_points, kyiv_polygon
 from .utils import convex_hull
 
 
+
 ccoordinate_list = kyiv_points
 starting_coordinate = (50.4501, 30.5234)
 
 def poke_players_places(coordinate, ccoordinate_list):
 	export_material = []	# here will be list of lists in every list there will be locations for one player to scan
 	
-	for player in range(400):
+	for player in range(1):
 		pts = [ geopy.Point(p[0],p[1]) for p in ccoordinate_list ]
 		onept = geopy.Point(coordinate[0],coordinate[1])
 		alldist = [ (p,geopy.distance.distance(p, onept).km) for p in pts ]
@@ -37,7 +38,7 @@ def poke_players_places(coordinate, ccoordinate_list):
 			break	# it means that we out of coordinates to draw
 		coordinate = ccoordinate_list[0]
 
-	return export_material
+	return export_material	# return export_material[:-30]
 
 
 def polygon(request):
