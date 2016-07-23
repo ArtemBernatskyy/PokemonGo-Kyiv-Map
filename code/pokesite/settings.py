@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mapview',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -51,6 +52,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'pokesite.urls'
@@ -127,3 +129,25 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn')
 
 # Grapelli
 GRAPPELLI_ADMIN_TITLE = "Poke Administration"
+
+# Redis
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+# Django toolbar
+INTERNAL_IPS = ('172.16.0.2', '127.0.0.1', '0.0.0.0', '10.0.2.15', '10.0.2.2')
+
+# Be careful it will show toolbar forany IP
+def show_toolbar(request):
+    return True
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': 'pokesite.settings.show_toolbar',
+}
