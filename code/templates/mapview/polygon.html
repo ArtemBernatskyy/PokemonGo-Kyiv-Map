@@ -1,0 +1,89 @@
+{% load random_color %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Kiv Polygon</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE5gs5HocjA7siM5zfOagnxR1zapM1WEY">
+    </script>
+    <script src="https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/maps.google.polygon.containsLatLng.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <script>
+        {% for player in kyiv_points %}
+        var bigdata{{ forloop.counter }} = [
+            {% for points in player %}
+              {% for point in points %}
+                {lng:{{ point.0 }}, lat: {{ point.1 }}},
+              {% endfor %}
+            {% endfor %}
+        ];
+        {% endfor %}
+
+
+        var kyivCoords = [
+            {% for pol_point in kyiv_polygon %}
+            {lng:{{ pol_point.0 }}, lat: {{ pol_point.1 }}},
+            {% endfor %}
+        ];
+
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 11,
+          center: {lat: 50.4501, lng: 30.5234},
+          mapTypeId: google.maps.MapTypeId.TERRAIN
+        });
+
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++ ) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        // Construct the polygon.
+        var Kiev = new google.maps.Polygon({
+          paths: kyivCoords,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35
+        });
+        Kiev.setMap(map);
+
+
+
+
+        var marker, i;
+
+        {% for player in kyiv_points %}
+        for (i = 0; i < bigdata{{ forloop.counter }}.length; i++) {
+              marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(bigdata{{ forloop.counter }}[i]['lat'], bigdata{{ forloop.counter }}[i]['lng']),
+                  map: map,
+                  
+                  icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|{% random_color  %}" 
+              });
+        }
+        {% endfor %}
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>Google Maps Multiple Markers</title>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE5gs5HocjA7siM5zfOagnxR1zapM1WEY&callback=initMap"
+    async defer></script>
+    <script src="https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/geoxml3.js"></script>
+</head>
+
+<body>
+    <div id="map" style="width: 1000px; height: 600px;"></div>
+    <script type="text/javascript">
+    var locations = [
+      {% for poke in data %}
+      ['{{ poke.0 }}', {{ poke.0 }}, {{ poke.1 }}, {{ forloop.counter }}],
+      {% endfor %}
+
+    ];
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: new google.maps.LatLng(50.448178, 30.460203),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    var ctaLayer = new google.maps.KmlLayer({
+        url: 'https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/kyiv.kml'
+    });
+    ctaLayer.setMap(map);
+
+    for (i = 0; i < locations.length; i++) {
+        marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            map: map
+        });
+
+        // 
+
+        // 
+
+
+
+        // 
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                infowindow.setContent(locations[i][0]);
+                infowindow.open(map, marker);
+            }
+        })(marker, i));
+    }
+    </script>
+
+
+</body>
+
+</html>
