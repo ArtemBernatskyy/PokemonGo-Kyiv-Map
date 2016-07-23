@@ -58,7 +58,7 @@ def poke_players_places(coordinate, ccoordinate_list):
 				del ccoordinate_list[i]
 
 		# optionaly return sorted coordinates by graham algorythm for poligon visualisation
-		# player_list = convex_hull(player_list)
+		player_list = convex_hull(player_list)
 		export_material.append([player_list])
 		# changing starting point
 		if len(ccoordinate_list) == 0:
