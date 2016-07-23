@@ -68,16 +68,23 @@
         });
         Kiev.setMap(map);
 
-
-
-
         var marker, i;
 
         {% for player in kyiv_points %}
+        for (i = 0; i < bigdata{{ forloop.counter }}.length; i++) {
+              marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(bigdata{{ forloop.counter }}[i]['lat'], bigdata{{ forloop.counter }}[i]['lng']),
+                  map: map,
+                  
+                  icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|{% random_color  %}" 
+              });
+        }
+        {% endfor %}
 
 
-
-
+        // "For displaying as polygons"
+        {% comment %} 
+        {% for player in kyiv_points %}
         var player{{ forloop.counter }} = new google.maps.Polygon({
           paths: bigdata{{ forloop.counter }},
           strokeColor: '#{% random_color  %}',
@@ -88,6 +95,7 @@
         });
         player{{ forloop.counter }}.setMap(map);
         {% endfor %}
+        {% endcomment %} 
 
     </script>
   </body>
