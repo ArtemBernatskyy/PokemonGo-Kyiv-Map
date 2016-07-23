@@ -1,62 +1,102 @@
+{% load random_color %}
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Kyiv Polygon</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE5gs5HocjA7siM5zfOagnxR1zapM1WEY">
+    </script>
+    <script src="https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/maps.google.polygon.containsLatLng.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
 
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>Google Maps Multiple Markers</title>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE5gs5HocjA7siM5zfOagnxR1zapM1WEY&callback=initMap"
-    async defer></script>
-    <script src="https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/geoxml3.js"></script>
-</head>
+    <script>
+        {% for player in kyiv_points %}
+        var bigdata{{ forloop.counter }} = [
+            {% for points in player %}
+              {% for point in points %}
+                {lng:{{ point.0 }}, lat: {{ point.1 }}},
+              {% endfor %}
+            {% endfor %}
+        ];
+        {% endfor %}
 
-<body>
-    <div id="map" style="width: 1000px; height: 600px;"></div>
-    <script type="text/javascript">
-    var locations = [
-      {% for poke in data %}
-      ['{{ poke.0 }}', {{ poke.0 }}, {{ poke.1 }}, {{ forloop.counter }}],
-      {% endfor %}
 
-    ];
+        var kyivCoords = [
+            {% for pol_point in kyiv_polygon %}
+            {lng:{{ pol_point.0 }}, lat: {{ pol_point.1 }}},
+            {% endfor %}
+        ];
 
-    var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 10,
-        center: new google.maps.LatLng(50.448178, 30.460203),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
 
-    var infowindow = new google.maps.InfoWindow();
-
-    var marker, i;
-
-    var ctaLayer = new google.maps.KmlLayer({
-        url: 'https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/kyiv.kml'
-    });
-    ctaLayer.setMap(map);
-
-    for (i = 0; i < locations.length; i++) {
-        marker = new google.maps.Marker({
-            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-            map: map
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 11,
+          center: {lat: 50.4501, lng: 30.5234},
+          mapTypeId: google.maps.MapTypeId.TERRAIN
         });
 
-        // 
 
-        // 
-
-
-
-        // 
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-                infowindow.setContent(locations[i][0]);
-                infowindow.open(map, marker);
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++ ) {
+                color += letters[Math.floor(Math.random() * 16)];
             }
-        })(marker, i));
-    }
+            return color;
+        }
+        // Construct the polygon.
+        var Kiev = new google.maps.Polygon({
+          paths: kyivCoords,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35
+        });
+        Kiev.setMap(map);
+
+        var marker, i;
+
+        {% for player in kyiv_points %}
+        for (i = 0; i < bigdata{{ forloop.counter }}.length; i++) {
+              marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(bigdata{{ forloop.counter }}[i]['lat'], bigdata{{ forloop.counter }}[i]['lng']),
+                  map: map,
+                  
+                  icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|{% random_color  %}" 
+              });
+        }
+        {% endfor %}
+
+
+        // "For displaying as polygons"
+        {% comment %} 
+        {% for player in kyiv_points %}
+        var player{{ forloop.counter }} = new google.maps.Polygon({
+          paths: bigdata{{ forloop.counter }},
+          strokeColor: '#{% random_color  %}',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#{% random_color  %}',
+          fillOpacity: 0.35
+        });
+        player{{ forloop.counter }}.setMap(map);
+        {% endfor %}
+        {% endcomment %} 
+
     </script>
-
-
-</body>
-
+  </body>
 </html>

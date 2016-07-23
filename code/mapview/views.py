@@ -39,14 +39,6 @@ def poke_players_places(coordinate, ccoordinate_list):
 
 	return export_material
 
-# Create your views here.
-def map(request):
-	context = {
-	'data': kyiv_points
-	}
-
-	return render(request, "mapview/map.html", context)
-
 
 def polygon(request):
 	kyiv_points = poke_players_places(starting_coordinate, ccoordinate_list)
@@ -56,4 +48,4 @@ def polygon(request):
 	'kyiv_points': kyiv_points
 	}
 
-	return render(request, "mapview/polygon.html", context)
+	return render(request, "mapview/map.html", context)
