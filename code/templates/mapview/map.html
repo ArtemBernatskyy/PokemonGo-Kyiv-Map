@@ -24,23 +24,13 @@
     <div id="map"></div>
 
     <script>
-        {% for player in kyiv_points %}
+        {% for player in players %}
         var bigdata{{ forloop.counter }} = [
-            {% for points in player %}
-              {% for point in points %}
-                {lng:{{ point.0 }}, lat: {{ point.1 }}},
-              {% endfor %}
+            {% for point in player.points.all %}
+                {lng:{{ point.lon }}, lat: {{ point.lat }}},
             {% endfor %}
         ];
         {% endfor %}
-
-
-        var kyivCoords = [
-            {% for pol_point in kyiv_polygon %}
-            {lng:{{ pol_point.0 }}, lat: {{ pol_point.1 }}},
-            {% endfor %}
-        ];
-
 
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 11,
@@ -49,14 +39,13 @@
         });
 
 
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF'.split('');
-            var color = '#';
-            for (var i = 0; i < 6; i++ ) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
+        {% comment %} 
+        var kyivCoords = [
+            {% for pol_point in kyiv_polygon %}
+            {lng:{{ pol_point.0 }}, lat: {{ pol_point.1 }}},
+            {% endfor %}
+        ];
+
         // Construct the polygon.
         var Kiev = new google.maps.Polygon({
           paths: kyivCoords,
@@ -67,11 +56,12 @@
           fillOpacity: 0.35
         });
         Kiev.setMap(map);
+        {% endcomment %} 
 
         var marker, i;
 
         {# comment #} 
-        {% for player in kyiv_points %}
+        {% for player in players %}
         for (i = 0; i < bigdata{{ forloop.counter }}.length; i++) {
               marker = new google.maps.Marker({
                   position: new google.maps.LatLng(bigdata{{ forloop.counter }}[i]['lat'], bigdata{{ forloop.counter }}[i]['lng']),
