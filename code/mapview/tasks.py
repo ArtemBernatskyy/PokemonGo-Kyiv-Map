@@ -3,7 +3,7 @@ from pokesite.celery import app
 from datetime import datetime
 # from celery.decorators import task
 from celery import shared_task
-from time import sleep
+import time
 from pgoapi import PGoApi
 from pgoapi.utilities import f2i, h2f
 from django.core.cache import cache
@@ -64,10 +64,12 @@ def player_scan(id):
 				if 'catchable_pokemons' in map_cell.keys():
 					for pokemon in map_cell['catchable_pokemons']:
 						expiration_time = int((datetime.fromtimestamp(int(pokemon['expiration_timestamp_ms'])/1000) - datetime.now()).total_seconds())
-						print('@@@@@@@' ,expiration_time)
-						cache.add('pokemon_{0}'.format(pokemon['encounter_id']), pokemon, expiration_time)
+						pokemon['expirationtime'] = datetime.fromtimestamp(float(pokemon['expiration_timestamp_ms'])/1000).strftime("%H:%M:%S")
+						pokemon['final_time'] = float(pokemon['expiration_timestamp_ms'])/1000
+						if not int(pokemon['expiration_timestamp_ms']) == -1:
+							cache.add('pokemon_{0}'.format(pokemon['encounter_id']), pokemon, expiration_time)
 
-			sleep(1)
+			time.sleep(1)
 
 		database_counter -= 1
 		if database_counter < 0:	# then updating state from database

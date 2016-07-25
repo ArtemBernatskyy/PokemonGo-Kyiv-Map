@@ -2,9 +2,12 @@
 <!DOCTYPE html>
 <html>
   <head>
+    {# <meta http-equiv="refresh" content="20" > #}
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+    <script type="text/javascript" src="https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/moment.js"></script>
     <title>Kyiv Polygon</title>
+
     <style>
       html, body {
         height: 100%;
@@ -16,37 +19,89 @@
       }
     </style>
 
-    <script src="https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/maps.google.polygon.containsLatLng.js"></script>
+
   </head>
   <body>
     <div id="map"></div>
 
     <script>
+    function getInfoCallback(map, content) {
+        var infowindow = new google.maps.InfoWindow({content: content});
+        return function() {
+                infowindow.setContent(content); 
+                infowindow.open(map, this);
+            };
+    }
+
+
     function initMap() {
 
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 11,
           center: {lat: 50.4501, lng: 30.5234},
-          // mapTypeId: google.maps.MapTypeId.TERRAIN
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
         });
 
 
 
           {% for poke in pokemons %}
-              var marker = new google.maps.Marker({
+              var marker{{ forloop.counter }} = new google.maps.Marker({
                     position: new google.maps.LatLng({{ poke.latitude }}, {{ poke.longitude }}),
                     map: map,
                     icon: "{{ poke.image }}" 
                 });
-          {% endfor %}
+          
 
-
+                google.maps.event.addListener(
+                        marker{{ forloop.counter }},
+                        'click',
+                        getInfoCallback(map, "<div><b>Pidgey</b><span> - </span><small><a href='http://www.pokemon.com/us/pokedex/{{ poke.pokemon_id }}' target='_blank' title='View in Pokedex'>#{{ poke.pokemon_id }}</a></small></div><div>Disappears at - {{ poke.expirationtime }} <span class='label-countdown' disappears-at='{{ poke.final_time }}'></span></div><div><a href='https://www.google.com/maps/dir/Current+Location/{{ poke.latitude }},{{ poke.longitude }}' target='_blank' title='View in Maps'>Get Directions</a></div>")
+                );
+                {% endfor %}
 
     }
+
+
+
+
     </script>
 
         <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE5gs5HocjA7siM5zfOagnxR1zapM1WEY&callback=initMap">
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+
+    <script type="text/javascript">
+    var setLabelTime = function(){
+        $('.label-countdown').each(function (index, element) {
+            var disappearsAt = new Date(parseInt(element.getAttribute("disappears-at"))*1000);
+            var now = new Date();
+            
+            var difference = Math.abs(disappearsAt - now);
+            var hours = Math.floor(difference / 36e5);
+            var minutes = Math.floor((difference - (hours * 36e5)) / 6e4);
+            var seconds = Math.floor((difference - (hours * 36e5) - (minutes * 6e4)) / 1e3);
+            
+            if(disappearsAt < now){
+                timestring = "(expired)";
+            } 
+            else {
+                timestring = "(";
+                if(hours > 0)
+                    timestring = hours + "h";
+                
+                timestring += ("0" + minutes).slice(-2) + "m";
+                timestring += ("0" + seconds).slice(-2) + "s";
+                timestring += ")";
+            }
+
+            $(element).text(timestring)
+        });
+    };
+
+    window.setInterval(setLabelTime, 1000);
+
     </script>
 
   </body>
