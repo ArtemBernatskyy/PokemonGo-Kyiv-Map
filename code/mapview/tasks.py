@@ -39,6 +39,7 @@ def player_scan(id):
 	api_login_result = False
 	while not api_login_result:
 		try:
+			print(':::login')
 			api_login_result = api.login('ptc', player.name, player.password)
 		except ValueError:
 			api_login_result = False
@@ -66,10 +67,10 @@ def player_scan(id):
 						expiration_time = int((datetime.fromtimestamp(int(pokemon['expiration_timestamp_ms'])/1000) - datetime.now()).total_seconds())
 						pokemon['expirationtime'] = datetime.fromtimestamp(float(pokemon['expiration_timestamp_ms'])/1000).strftime("%H:%M:%S")
 						pokemon['final_time'] = float(pokemon['expiration_timestamp_ms'])/1000
-						if not int(pokemon['expiration_timestamp_ms']) == -1:
+						if int(pokemon['expiration_timestamp_ms']) != -1:
 							cache.add('pokemon_{0}'.format(pokemon['encounter_id']), pokemon, expiration_time)
 
-			time.sleep(1)
+			# time.sleep(1)
 
 		database_counter -= 1
 		if database_counter < 0:	# then updating state from database

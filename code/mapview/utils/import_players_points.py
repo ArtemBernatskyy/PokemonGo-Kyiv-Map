@@ -17,7 +17,7 @@ for player_id in range(400):
 	pts = [ geopy.Point(p[0],p[1]) for p in ccoordinate_list ]
 	onept = geopy.Point(coordinate[0],coordinate[1])
 	alldist = [ (p,geopy.distance.distance(p, onept).km) for p in pts ]
-	nearest_points = sorted(alldist, key=lambda x: (x[1]))[:99]
+	nearest_points = sorted(alldist, key=lambda x: (x[1]))[:600]
 
 	# converting to normal view
 	player_list = []
