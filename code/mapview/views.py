@@ -1,10 +1,12 @@
 from django.shortcuts import render
+from .utils.functions import get_pokemons_from_cache
+# from .tasks import player_area
 from .models import Player, City
 
 
 def polygon(request):
-	kyiv_points = ''
-
+	pokemons = get_pokemons_from_cache()
+	# player_area.delay(2)
 	context = {
 		'cities': City.objects.active(),
 		'players': Player.objects.active(),

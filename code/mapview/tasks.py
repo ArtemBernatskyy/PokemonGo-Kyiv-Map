@@ -1,6 +1,7 @@
 from __future__ import absolute_import
+from pokesite.celery import app
+# from celery.decorators import task
 from celery import shared_task
-from celery.decorators import task
 from time import sleep
 from pgoapi import PGoApi
 from pgoapi.utilities import f2i, h2f
@@ -27,7 +28,7 @@ def get_cell_ids(lat, long, radius = 10):
 	return sorted(walk)
 
 
-@app.task
+@app.task()
 def player_area(id):
 	player = Player.objects.get(id=id)
 	cache_name = player.name

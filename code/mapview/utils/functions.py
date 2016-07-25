@@ -1,4 +1,13 @@
 from functools import reduce
+from django.core.cache import cache
+
+
+def get_pokemons_from_cache():
+	pokemons_list = []
+	pokemons_in_cache = cache.iter_keys("pokemon_*")
+	for pokemon_in_cache in pokemons_in_cache:
+		pokemons_list.append(cache.get(str(pokemon_in_cache)))
+	return pokemons_list
 
 
 def generate_map():
@@ -42,6 +51,7 @@ def _keep_left(hull, r):
     if not len(hull) or hull[-1] != r:
         hull.append(r)
     return hull
+
 
 def convex_hull(points):
     """Returns points on convex hull of an array of points in CCW order."""
