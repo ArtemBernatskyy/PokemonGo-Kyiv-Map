@@ -58,12 +58,13 @@ def player_scan(id):
 				cell_id=cell_ids
 				)
 
-			expiration_time = (datetime.fromtimestamp(1469415292068/1000) - datetime.now()).total_seconds()
+			
 			response_dict = api.call()
 			for map_cell in response_dict['responses']['GET_MAP_OBJECTS']['map_cells']:
 				if 'catchable_pokemons' in map_cell.keys():
 					for pokemon in map_cell['catchable_pokemons']:
-						print(pokemon)
+						expiration_time = int((datetime.fromtimestamp(int(pokemon['expiration_timestamp_ms'])/1000) - datetime.now()).total_seconds())
+						print('@@@@@@@' ,expiration_time)
 						cache.add('pokemon_{0}'.format(pokemon['encounter_id']), pokemon, expiration_time)
 
 			sleep(1)

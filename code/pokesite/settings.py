@@ -25,6 +25,7 @@ SECRET_KEY = '7pn&u699&1!niq%udakqpdfa!7c#+ygqu94-ssa3$kpms(3pb+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+LOCAL_DATABASE = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mapview',
-    'debug_toolbar',
+    # 'debug_toolbar',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -52,7 +53,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'pokesite.urls'
@@ -79,12 +80,26 @@ WSGI_APPLICATION = 'pokesite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if LOCAL_DATABASE:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'pokemondatabase1928828282',
+            'USER': 'vagrantuser28182',
+            'PASSWORD': 'vagrantpassword92832838',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
 
 
 # Password validation
@@ -142,15 +157,15 @@ CACHES = {
 }
 
 # Django toolbar
-INTERNAL_IPS = ('172.16.0.2', '127.0.0.1', '0.0.0.0', '10.0.2.15', '10.0.2.2')
+# INTERNAL_IPS = ('172.16.0.2', '127.0.0.1', '0.0.0.0', '10.0.2.15', '10.0.2.2')
 
 # Be careful it will show toolbar forany IP
-def show_toolbar(request):
-    return True
+# def show_toolbar(request):
+#     return True
 
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': 'pokesite.settings.show_toolbar',
-}
+# DEBUG_TOOLBAR_CONFIG = {
+#     'SHOW_TOOLBAR_CALLBACK': 'pokesite.settings.show_toolbar',
+# }
 
 # CELERY SETTINGS
 BROKER_URL = 'redis://localhost:6379/0'

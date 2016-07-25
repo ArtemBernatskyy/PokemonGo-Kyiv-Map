@@ -1,5 +1,6 @@
 from functools import reduce
 from django.core.cache import cache
+# from functools import lru_cache
 
 
 def get_pokemons_from_cache():
