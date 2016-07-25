@@ -1,14 +1,11 @@
 from __future__ import absolute_import
 from pokesite.celery import app
 from datetime import datetime
-# from celery.decorators import task
 from celery import shared_task
 import time
 from pgoapi import PGoApi
 from pgoapi.utilities import f2i, h2f
 from django.core.cache import cache
-# from google.protobuf.internal import encoder
-# from geopy.geocoders import GoogleV3
 from s2sphere import Cell, CellId, LatLng
 from mapview.models import Player, City
 

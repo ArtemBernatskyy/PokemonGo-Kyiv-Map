@@ -8,5 +8,5 @@
 
 ### To Do
 - celery tasks start scipt to run tasks for active users only
-- update config files
 - REST style update map by url path
+- Display Pokemon name in templates
