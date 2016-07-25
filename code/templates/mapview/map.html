@@ -15,28 +15,25 @@
         height: 100%;
       }
     </style>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE5gs5HocjA7siM5zfOagnxR1zapM1WEY">
-    </script>
+
     <script src="https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/maps.google.polygon.containsLatLng.js"></script>
   </head>
   <body>
     <div id="map"></div>
 
     <script>
+    function initMap() {
 
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 11,
           center: {lat: 50.4501, lng: 30.5234},
-          mapTypeId: google.maps.MapTypeId.TERRAIN
+          // mapTypeId: google.maps.MapTypeId.TERRAIN
         });
 
 
-        var marker, i;
-
 
           {% for poke in pokemons %}
-                marker = new google.maps.Marker({
+              var marker = new google.maps.Marker({
                     position: new google.maps.LatLng({{ poke.latitude }}, {{ poke.longitude }}),
                     map: map,
                     icon: "{{ poke.image }}" 
@@ -45,7 +42,12 @@
 
 
 
-
+    }
     </script>
+
+        <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAE5gs5HocjA7siM5zfOagnxR1zapM1WEY&callback=initMap">
+    </script>
+
   </body>
 </html>
