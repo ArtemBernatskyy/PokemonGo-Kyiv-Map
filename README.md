@@ -6,4 +6,5 @@
 - Redis is caching, Celery is working too
 
 ### To Do
-- all celery processes must send callback to one Redis variable
+- celery tasks start scipt to run tasks for active users only
+- update config files

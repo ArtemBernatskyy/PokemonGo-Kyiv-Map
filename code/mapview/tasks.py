@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from pokesite.celery import app
+from datetime import datetime
 # from celery.decorators import task
 from celery import shared_task
 from time import sleep
@@ -29,7 +30,7 @@ def get_cell_ids(lat, long, radius = 10):
 
 
 @app.task()
-def player_area(id):
+def player_scan(id):
 	player = Player.objects.get(id=id)
 	cache_name = player.name
 	api = PGoApi()
@@ -57,14 +58,16 @@ def player_area(id):
 				cell_id=cell_ids
 				)
 
+			expiration_time = (datetime.fromtimestamp(1469415292068/1000) - datetime.now()).total_seconds()
 			response_dict = api.call()
 			for map_cell in response_dict['responses']['GET_MAP_OBJECTS']['map_cells']:
 				if 'catchable_pokemons' in map_cell.keys():
 					for pokemon in map_cell['catchable_pokemons']:
 						print(pokemon)
-						cache.add('pokemon_{0}'.format(pokemon['encounter_id']), pokemon)
+						cache.add('pokemon_{0}'.format(pokemon['encounter_id']), pokemon, expiration_time)
 
-			# sleep(5)
+			sleep(1)
+
 		database_counter -= 1
 		if database_counter < 0:	# then updating state from database
 			player_state = Player.objects.get(id=id).state

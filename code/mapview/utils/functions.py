@@ -4,9 +4,17 @@ from django.core.cache import cache
 
 def get_pokemons_from_cache():
 	pokemons_list = []
+	name_list = []
 	pokemons_in_cache = cache.iter_keys("pokemon_*")
 	for pokemon_in_cache in pokemons_in_cache:
-		pokemons_list.append(cache.get(str(pokemon_in_cache)))
+		name_list.append(str(pokemon_in_cache))
+		# pokemons_list.append(cache.get(str(pokemon_in_cache)))
+	temp_list = cache.get_many(name_list)
+
+	for key, pokemon_data in temp_list.items():
+		pokemon_data.update({'image': '/static/mapview/icons/{0}.png'.format(str(pokemon_data['pokemon_id']))})
+
+		pokemons_list.append(pokemon_data)
 	return pokemons_list
 
 
