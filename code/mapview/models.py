@@ -2,18 +2,26 @@ from django.db import models
 
 # Create your models here.
 class PlayerManager(models.Manager):
-    def active(self, *args, **kwargs):
-        return super(PlayerManager, self).filter(state=True)
+    def active_and_lazy(self, *args, **kwargs):
+        return super(PlayerManager, self).filter(state=True, is_celery_run=False)
 
 
 
 class Player(models.Model):
+	LOGIN_CHOICES = (
+		(1, 'Success: Login'),
+		(0, 'Failed/Error'),
+		(None, 'Unknown/Inactive')
+	)
 	name = models.CharField(max_length=550, unique=True)
 	email = models.CharField(blank=True, null=True, max_length=550)
 	password = models.CharField(max_length=550)
 	created_date = models.DateTimeField(auto_now_add=True)
 	updated_date = models.DateTimeField(auto_now=True)
-	state = models.BooleanField(default=False, help_text='if true than this user will be active')
+	state = models.BooleanField(default=False, help_text='if true than this user will be active and will scan his square')
+	is_celery_run = models.BooleanField(default=False, help_text='if celery is running this process already')
+	can_login = models.IntegerField(choices=LOGIN_CHOICES, blank=True, null=True, verbose_name='login status') 
+	description = models.CharField(max_length=550, blank=True, null=True, help_text='descripe this player, and the area for which he is responsible for')
 
 	objects = PlayerManager()
 

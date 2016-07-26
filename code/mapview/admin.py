@@ -11,7 +11,8 @@ class PlayerPointAdmin(admin.ModelAdmin):
     list_display = ['lat', 'lon', 'player']
 
 class PlayerAdmin(admin.ModelAdmin):
-    list_filter = ('state',)
+    list_filter = ('state', 'is_celery_run',)
+    list_display = ['name', 'password', 'description', 'can_login', 'is_celery_run', 'state']
 
 
 admin.site.register(City)
