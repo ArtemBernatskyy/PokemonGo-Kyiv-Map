@@ -1,14 +1,22 @@
 #### Kyiv Pokemon Map Project
 
-### What is ready
-- getting Kyiv territory and dividing it in sectors
-- Database models are set up completely
-- Redis is caching, Celery is working too
-- time autodetecting thanks http://momentjs.com/timezone/
 
 ### To Do
-- celery tasks start scipt to run tasks for active users only
 - REST style update map by url path
 - Display Pokemon name in templates
-- add to Player models status by which we can determine if player can login to PTC ot not (banned or not)
-- sometimes Pokemons aren't dissapearing from map and cache
+
+
+
+
+
+#### In time of "Pokemnon fever" i have developed my own map.
+Technology stack: Django, Python, Celery, Redis.
+
+
+![example](https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/Screenshot+from+2016-07-26+21%3A27%3A11.png)
+
+![example](https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/Screenshot+from+2016-07-23+21%3A12%3A36.png)
+
+
+![example](https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/Screenshot+from+2016-07-23+20%3A13%3A57.png)
+
