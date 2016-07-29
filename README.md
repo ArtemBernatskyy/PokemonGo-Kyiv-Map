@@ -19,6 +19,6 @@ Technology stack: Django, Python, Celery, Redis.
 
 ![example](https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/Screenshot+from+2016-07-23+21%3A12%3A36.png)
 
-
+ 
 ![example](https://s3-eu-west-1.amazonaws.com/bernatskyys/admin/Screenshot+from+2016-07-23+20%3A13%3A57.png)
 
