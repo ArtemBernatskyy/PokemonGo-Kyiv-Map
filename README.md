@@ -1,4 +1,4 @@
-#### Kyiv Pokemon Map Project
+#### Pokemon Map Project
 
 
 ### To Do
