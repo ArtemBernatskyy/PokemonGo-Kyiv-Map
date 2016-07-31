@@ -3,7 +3,6 @@
 
 ### To Do
 - REST style update map by url path
-- Display Pokemon name in templates
 
 
 
